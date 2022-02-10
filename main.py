@@ -1,6 +1,8 @@
 from tkinter import *
 import random
 import time
+
+
 class Ball:
     def __init__(self, canvas, paddle, color):
         self.canvas = canvas
@@ -14,18 +16,29 @@ class Ball:
         self.canvas_height = self.canvas.winfo_height()
         self.canvas_width = self.canvas.winfo_width()
         self.hit_bottom = False
-        self.canvas.bind_all('<Button-1>', self.move_ball)
+        self.started = False
+        self.score = 0
+        self.canvas.bind_all('<Button-1>', self.game_started)
+
     def hit_paddle(self, pos):
         paddle_pos = self.canvas.coords(self.paddle.id)
         if pos[2] >= paddle_pos[0] and pos[0] <= paddle_pos[2]:
             if pos[3] >= paddle_pos[1] and pos[3] <= paddle_pos[3]:
+                self.score = self.score + 1
                 return True
         return False
 
-    def draw(self):
-        pass
+    def game_started(self, evt):
+        self.started = True
 
-    def move_ball(self, evt):
+    def draw(self):
+        if self.started == False:
+            pass
+        else:
+            self.move_ball()
+
+    def move_ball(self):
+
         self.canvas.move(self.id, self.x, self.y)
 
         pos = self.canvas.coords(self.id)
@@ -39,7 +52,6 @@ class Ball:
             self.x = 3
         if pos[2] >= self.canvas_width:
             self.x = -3
-
 
 
 class Paddle:
@@ -68,6 +80,16 @@ class Paddle:
     def turn_right(self, evt):
         self.x = 2
 
+
+def game_score(score, prewscore):
+    if prewscore < score:
+        canvas.create_text(450, 10, anchor=W, font="DejavuSansLight", text=score)
+        prewscore = score
+        return prscore
+    else:
+        return prscore
+
+
 tk = Tk()
 tk.title("Игра")
 tk.resizable(0, 0)
@@ -77,10 +99,13 @@ canvas.pack()
 tk.update()
 paddle = Paddle(canvas, 'blue')
 ball = Ball(canvas, paddle, 'red')
+
+
 while 1:
     if ball.hit_bottom == False:
         ball.draw()
         paddle.draw()
+        prscore = game_score(ball.score, prscore)
     else:
         canvas.create_text(
             180, 180, anchor=W, font="DejavuSansLight",
