@@ -24,7 +24,7 @@ class Ball:
         paddle_pos = self.canvas.coords(self.paddle.id)
         if pos[2] >= paddle_pos[0] and pos[0] <= paddle_pos[2]:
             if pos[3] >= paddle_pos[1] and pos[3] <= paddle_pos[3]:
-                self.score = self.score + 1
+                self.score += 1
                 return True
         return False
 
@@ -80,14 +80,18 @@ class Paddle:
     def turn_right(self, evt):
         self.x = 2
 
+class Score:
+    def __init__(self, Canvas, Ball):
+        self.ball_score = ball.score
+        self.score = Canvas.create_text(
+            400, 20, anchor=W, font="DejavuSansLight",
+            text='0'
+            )
 
-def game_score(score, prewscore):
-    if prewscore < score:
-        canvas.create_text(450, 10, anchor=W, font="DejavuSansLight", text=score)
-        prewscore = score
-        return prscore
-    else:
-        return prscore
+
+    def update_score(self, upd):
+        self.upd = upd
+        canvas.itemconfig(self.score, text=self.upd)
 
 
 tk = Tk()
@@ -99,16 +103,17 @@ canvas.pack()
 tk.update()
 paddle = Paddle(canvas, 'blue')
 ball = Ball(canvas, paddle, 'red')
-
+score = Score(canvas, ball)
 
 while 1:
     if ball.hit_bottom == False:
         ball.draw()
         paddle.draw()
-        prscore = game_score(ball.score, prscore)
+        score.update_score(ball.score)
+
     else:
         canvas.create_text(
-            180, 180, anchor=W, font="DejavuSansLight",
+            180, 200, anchor=W, font="DejavuSansLight",
             text="Игра оконченна"
         )
     tk.update_idletasks()
