@@ -80,14 +80,13 @@ class Paddle:
     def turn_right(self, evt):
         self.x = 2
 
+
 class Score:
-    def __init__(self, Canvas, Ball):
-        self.ball_score = ball.score
+    def __init__(self, Canvas):
         self.score = Canvas.create_text(
-            400, 20, anchor=W, font="DejavuSansLight",
+            430, 20, anchor=W, font="DejavuSansLight",
             text='0'
             )
-
 
     def update_score(self, upd):
         self.upd = upd
@@ -103,7 +102,7 @@ canvas.pack()
 tk.update()
 paddle = Paddle(canvas, 'blue')
 ball = Ball(canvas, paddle, 'red')
-score = Score(canvas, ball)
+score = Score(canvas)
 
 while 1:
     if ball.hit_bottom == False:
